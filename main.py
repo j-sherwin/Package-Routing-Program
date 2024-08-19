@@ -66,18 +66,20 @@ def insert_distances(csvfile):
 
     return distances
 
-def find_distance(package1, package2):
-    package1_index = 0
-    package2_index = 0
-    for i in range (0, len(address_list)):
-        if address_list[i] == package1.address:
-            package1_index = i
-            break
-    for i in range (0, len(address_list)):
-        if address_list[i] == package2.address:
-            package2_index = i
-            break
-    return distances_list[package1_index][package2_index]
+def find_distance(address1, address2):
+    return distances_list[address_list.index(address1)][address_list.index(address2)]
+
+def min_distance(address1, addressList):
+    min = None
+    min_address = None
+    for i in range(0, len(addressList)):
+        distance = find_distance(address1, addressList[i])
+        if min is None or distance < min:
+            min = distance
+            min_address = addressList[i]
+    print(min)
+    print(min_address)
+
 
 def change_status(id):
     package = package_hash.find(id)
@@ -90,7 +92,6 @@ package_hash = HashTable()
 insert_packages('packages.csv')
 address_list = insert_addresses('distancetable.csv')
 distances_list = insert_distances('distancetable.csv')
-print(package_hash.find(4))
-print(package_hash.find(10))
-print(find_distance(package_hash.find(4), package_hash.find(10)))
+
+min_distance(package_hash.find(3).address, address_list)
 
