@@ -83,7 +83,8 @@ def min_distance(address1, truck_packages):
     return [min_address, package_id]
 
 def deliver_packages(truck):
-
+    if truck.current_time > datetime(2024, 8, 18, 8, 59):
+        return True
     for package in truck.packages:
         package_hash.find(package).status = "En Route"
     while len(truck.packages) > 0:
@@ -91,10 +92,13 @@ def deliver_packages(truck):
         distance = float(find_distance(truck.location,next_stop[0]))
         delivery_time = timedelta(hours = distance / 18)
         truck.current_time += delivery_time
+        if truck.current_time > datetime(2024,8,18,8,30):
+            return True
         truck.distance_traveled += distance
         truck.location = next_stop[0]
         truck.packages.remove(next_stop[1])
         package_hash.find(next_stop[1]).status = f"Delivered at {truck.current_time}"
+
 
 package_hash = HashTable()
 insert_packages('packages.csv')
@@ -103,11 +107,11 @@ distances_list = insert_distances('distancetable.csv')
 truck1 = Truck(datetime(2024,8,18,8,0), address_list[0])
 truck2 = Truck(datetime(2024,8,18,9,0), address_list[0])
 truck1.add_packages([1, 5, 8, 6, 40, 23, 9])
+deliver_packages(truck1)
 truck2.add_packages([4, 7, 12, 25, 39, 32, 2])
+truck1.add_packages([16, 17, 18])
 deliver_packages(truck1)
 deliver_packages(truck2)
+total_miles = truck1.distance_traveled + truck2.distance_traveled
+print(total_miles)
 package_hash.print()
-print(truck1.distance_traveled + truck2.distance_traveled)
-print(truck1.packages)
-print(truck1.current_time)
-print(truck2.current_time)
