@@ -1,16 +1,22 @@
 from datetime import timedelta
-
 from datastructures import *
 from truck import *
 
+# Initializes a Hash Table object and inserts packages into hash.
 package_hash = HashTable()
 insert_packages('packages.csv', package_hash)
+
+# Reads address and distances from csv and creates a list of addresses and a list of distances.
 address_list = insert_addresses('distancetable.csv')
 distances_list = insert_distances('distancetable.csv')
+
+# Initializes three trucks with their time to leave the HUB and the HUB location.
 truck1 = Truck(timedelta(hours=8), address_list[0])
 truck2 = Truck(timedelta(hours=8), address_list[0])
 truck3 = Truck(timedelta(hours=10,minutes=20), address_list[0])
-truck1.add_packages([1, 5, 8, 6, 40, 23, 10])
+
+# Packages are loaded onto each truck by ID
+truck1.add_packages([1, 5, 8, 28, 6, 40, 23, 10])
 truck2.add_packages([4, 7, 12, 25, 39, 32, 2])
 truck3.add_packages([9, 16, 17, 18])
 
@@ -62,7 +68,8 @@ def deliver_packages(truck, selected_time):
         truck.time += delivery_time
         truck.distance_traveled += distance
         truck.location = address_list[0]
-
+        #TODO REMOVE THIS DEBUGGING PRINT STATEMENT
+        print(truck.time)
 
 
 def main():
