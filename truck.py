@@ -1,10 +1,8 @@
-from datetime import time
-
 
 class Truck:
-    def __init__(self, time_left, location):
-        self.current_time = time_left
-        self.time_left_hub = time_left
+    def __init__(self, time, location):
+        self.time = time
+        self.time_left_hub = time
         self.location = location
         self.packages = []
         self.distance_traveled = 0.0
