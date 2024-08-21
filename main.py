@@ -2,6 +2,12 @@ from datetime import timedelta
 from datastructures import *
 from truck import *
 
+cyan = "\033[36m"
+magenta = "\033[35m"
+red = '\033[31m'
+blue = "\033[34m"
+default = '\033[0m'
+
 # Initializes a Hash Table object and inserts packages into hash.
 package_hash = HashTable()
 insert_packages('packages.csv', package_hash)
@@ -12,13 +18,15 @@ distances_list = insert_distances('distancetable.csv')
 
 # Initializes three trucks with their time to leave the HUB and the HUB location.
 truck1 = Truck(timedelta(hours=8), address_list[0])
-truck2 = Truck(timedelta(hours=8), address_list[0])
-truck3 = Truck(timedelta(hours=10,minutes=20), address_list[0])
+truck2 = Truck(timedelta(hours=10,minutes=20), address_list[0])
+truck3 = Truck(timedelta(hours=9,minutes=5), address_list[0])
 
 # Packages are loaded onto each truck by ID
-truck1.add_packages([1, 5, 8, 28, 6, 40, 23, 10])
-truck2.add_packages([4, 7, 12, 25, 39, 32, 2])
-truck3.add_packages([9, 16, 17, 18])
+truck1.add_packages([14,15,19,16,13,20,21,1,39,10,37,34,30])
+truck2.add_packages([18,3,36,9,27,35,2,33,28,5,24,19,38])
+truck3.add_packages([29,7,6,17,31,32,12,8,25,26,11,23,22,40,4])
+
+
 
 # Checks 2D Array of Distances to find distance between two addresses.
 def find_distance(address1, address2):
@@ -31,7 +39,7 @@ def min_distance(address1, truck_packages):
     package_id = None
     for i in range(0, len(truck_packages)):
         truck_package_address = package_hash.find(truck_packages[i]).address
-        distance = find_distance(address1, truck_package_address)
+        distance = float(find_distance(address1, truck_package_address))
         if min is None or distance < min:
             min = distance
             min_address = truck_package_address
@@ -61,24 +69,21 @@ def deliver_packages(truck, selected_time):
         truck.packages.remove(next_stop[1])
         package_hash.find(next_stop[1]).status = f"Delivered at {truck.time}"
 
-    # Sends truck1 back to hub so driver can take truck3
+    # Sends truck1 back to hub so driver can take truck2
     if truck == truck1:
         distance = float(find_distance(truck.location, address_list[0]))
         delivery_time = timedelta(hours = distance / 18)
         truck.time += delivery_time
         truck.distance_traveled += distance
         truck.location = address_list[0]
-        #TODO REMOVE THIS DEBUGGING PRINT STATEMENT
-        print(truck.time)
-
 
 def main():
     exit_menu = False
 
     while not exit_menu:
-        print("#########################################")
-        print("#####  WGUPS DELIVERY SYSTEM MENU  ######")
-        print("#########################################")
+        print(f"{blue}###############################################")
+        print("########  WGUPS DELIVERY SYSTEM MENU  #########")
+        print(f"###############################################{default}")
         print("Please Enter a Number to Select a Menu Option:")
         print("1. Show All Package Statuses at Specific Time")
         print("2. Show Single Package Status at Specific Time")
@@ -94,9 +99,13 @@ def main():
                     deliver_packages(truck1, time)
                     deliver_packages(truck2, time)
                     deliver_packages(truck3, time)
+                    print(f"\nID | Address | City | State | Zipcode | Deadline | Weight | Status")
                     package_hash.print()
                     total_miles = truck1.distance_traveled + truck2.distance_traveled + truck3.distance_traveled
-                    print(f"\nTotal Mileage Traveled by All Trucks at {time}: {total_miles:.2f} miles\n")
+                    print(f"\nTruck 1 Mileage: {truck1.distance_traveled:.2f}")
+                    print(f"Truck 2 Mileage: {truck2.distance_traveled:.2f}")
+                    print(f"Truck 3 Mileage: {truck3.distance_traveled:.2f}")
+                    print(f"\n{red}Total Mileage Traveled by All Trucks at {time}: {total_miles:.2f} miles\n{default}")
                 except ValueError:
                     print("Invalid Input - Returning to Main Menu")
             case "2":
@@ -108,9 +117,13 @@ def main():
                     deliver_packages(truck1, time)
                     deliver_packages(truck2, time)
                     deliver_packages(truck3, time)
+                    print(f"\nID | Address | City | State | Zipcode | Deadline | Weight | Status")
                     print(package_hash.find(int(selected_package)))
                     total_miles = truck1.distance_traveled + truck2.distance_traveled + truck3.distance_traveled
-                    print(f"\nTotal Mileage Traveled by All Trucks at {time}: {total_miles:.2f} miles\n")
+                    print(f"\nTruck 1 Mileage: {truck1.distance_traveled:.2f}")
+                    print(f"Truck 2 Mileage: {truck2.distance_traveled:.2f}")
+                    print(f"Truck 3 Mileage: {truck3.distance_traveled:.2f}")
+                    print(f"\n{red}Total Mileage Traveled by All Trucks at {time}: {total_miles:.2f} miles\n{default}")
                 except ValueError:
                     print("Invalid Input - Returning to Main Menu")
             case "3":
@@ -118,9 +131,16 @@ def main():
                 deliver_packages(truck1, time)
                 deliver_packages(truck2, time)
                 deliver_packages(truck3, time)
+                print(f"\n{cyan}ID | Address | City | State | Zipcode | Deadline | Weight | Status{default}")
                 package_hash.print()
                 total_miles = truck1.distance_traveled + truck2.distance_traveled + truck3.distance_traveled
-                print(f"\nTotal Mileage Traveled by All Trucks: {total_miles:.2f} miles\n")
+                print(f"\n{red}Total Mileage Traveled by All Trucks: {total_miles:.2f} miles\n{default}")
+                print("Truck 1\n_______________________________")
+                print(f"Left Hub: {truck1.time_left_hub}\nFinished Delivering: {truck1.time}\nFinal Location: {truck1.location}\nTotal Mileage: {truck1.distance_traveled:.2f}")
+                print("\nTruck 2\n_______________________________")
+                print(f"Left Hub: {truck2.time_left_hub}\nFinished Delivering: {truck2.time}\nFinal Location: {truck2.location}\nTotal Mileage: {truck2.distance_traveled:.2f}")
+                print("\nTruck 3\n_______________________________")
+                print(f"Left Hub: {truck3.time_left_hub}\nFinished Delivering: {truck3.time}\nFinal Location: {truck3.location}\nTotal Mileage: {truck3.distance_traveled:.2f}\n")
             case "4":
                 exit_menu = True
             case _:
