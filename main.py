@@ -99,7 +99,7 @@ def main():
                     deliver_packages(truck1, time)
                     deliver_packages(truck2, time)
                     deliver_packages(truck3, time)
-                    print(f"\nID | Address | City | State | Zipcode | Deadline | Weight | Status")
+                    print(f"\n{cyan}ID | Address | City | State | Zipcode | Deadline | Weight | Status{default}")
                     package_hash.print()
                     total_miles = truck1.distance_traveled + truck2.distance_traveled + truck3.distance_traveled
                     print(f"\nTruck 1 Mileage: {truck1.distance_traveled:.2f}")
@@ -117,7 +117,7 @@ def main():
                     deliver_packages(truck1, time)
                     deliver_packages(truck2, time)
                     deliver_packages(truck3, time)
-                    print(f"\nID | Address | City | State | Zipcode | Deadline | Weight | Status")
+                    print(f"\n{cyan}ID | Address | City | State | Zipcode | Deadline | Weight | Status{default}")
                     print(package_hash.find(int(selected_package)))
                     total_miles = truck1.distance_traveled + truck2.distance_traveled + truck3.distance_traveled
                     print(f"\nTruck 1 Mileage: {truck1.distance_traveled:.2f}")
