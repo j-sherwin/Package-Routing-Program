@@ -32,19 +32,19 @@ truck3.add_packages([29,7,6,17,31,32,12,8,25,26,11,23,22,40,4])
 def find_distance(address1, address2):
     return distances_list[address_list.index(address1)][address_list.index(address2)]
 
-# Uses greedy algorithm to determine the closest address from the list of remaining truck packages. Returns that address and a package ID.
+# Uses greedy algorithm to determine the closest address from the list of remaining truck packages. Returns that address, distance, and package ID.
 def min_distance(address1, truck_packages):
-    min = None
+    short_distance = None
     min_address = None
     package_id = None
     for i in range(0, len(truck_packages)):
         truck_package_address = package_hash.find(truck_packages[i]).address
         distance = float(find_distance(address1, truck_package_address))
-        if min is None or distance < min:
-            min = distance
+        if short_distance is None or distance < short_distance:
+            short_distance = distance
             min_address = truck_package_address
             package_id = truck_packages[i]
-    return [min_address, package_id]
+    return [min_address, package_id, short_distance]
 
 def deliver_packages(truck, selected_time):
     # If time truck leaves hub is later than the user inputted time, no packages will be delivered.
@@ -57,17 +57,16 @@ def deliver_packages(truck, selected_time):
     for package in truck.packages:
         package_hash.find(package).status = "En Route"
     while len(truck.packages) > 0:
-        next_stop = min_distance(truck.location, truck.packages)
-        distance = float(find_distance(truck.location,next_stop[0]))
+        address, package_id, distance = min_distance(truck.location, truck.packages)
         delivery_time = timedelta(hours = distance / 18)
         truck.time += delivery_time
         # If truck's time becomes greater than user inputted time, function exits and status of all packages will be preserved in hash table for printing.
         if truck.time > selected_time:
             return True
         truck.distance_traveled += distance
-        truck.location = next_stop[0]
-        truck.packages.remove(next_stop[1])
-        package_hash.find(next_stop[1]).status = f"Delivered at {truck.time}"
+        truck.location = address
+        truck.packages.remove(package_id)
+        package_hash.find(package_id).status = f"Delivered at {truck.time}"
 
     # Sends truck1 back to hub so driver can take truck2
     if truck == truck1:
