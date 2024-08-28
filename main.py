@@ -1,7 +1,10 @@
+# Jonathan Sherwin - C950 - Student ID: 011064274
+
 from datetime import timedelta
 from datastructures import *
 from truck import *
 
+# Setting variables for color text output
 cyan = "\033[36m"
 magenta = "\033[35m"
 red = '\033[31m'
@@ -21,7 +24,7 @@ truck1 = Truck(timedelta(hours=8), address_list[0])
 truck2 = Truck(timedelta(hours=10,minutes=20), address_list[0])
 truck3 = Truck(timedelta(hours=9,minutes=5), address_list[0])
 
-# Packages are loaded onto each truck by ID
+# Packages are loaded onto each truck by their package ID
 truck1.add_packages([14,15,19,16,13,20,21,1,39,10,37,34,30])
 truck2.add_packages([18,3,36,9,27,35,2,33,28,5,24,19,38])
 truck3.add_packages([29,7,6,17,31,32,12,8,25,26,11,23,22,40,4])
@@ -91,6 +94,7 @@ def main():
         selection = input("Enter Selection: ")
         match selection:
             case "1":
+                # User inputs specific time, program outputs status of all packages at that time.
                 try:
                     selected_time = input("Please Enter 24hr Time (HH:MM): ")
                     h, m = selected_time.split(":")
@@ -108,6 +112,7 @@ def main():
                 except ValueError:
                     print("Invalid Input - Returning to Main Menu")
             case "2":
+                # User inputs specific time and specific package ID. Program outputs that package's status
                 try:
                     selected_time = input("Please Enter 24hr Time (HH:MM): ")
                     h, m = selected_time.split(":")
@@ -126,6 +131,7 @@ def main():
                 except ValueError:
                     print("Invalid Input - Returning to Main Menu")
             case "3":
+                # All packages are delivered. All relevant delivery stats are displayed.
                 time = timedelta(days=1)
                 deliver_packages(truck1, time)
                 deliver_packages(truck2, time)
@@ -141,6 +147,7 @@ def main():
                 print("\nTruck 3\n_______________________________")
                 print(f"Left Hub: {truck3.time_left_hub}\nFinished Delivering: {truck3.time}\nFinal Location: {truck3.location}\nTotal Mileage: {truck3.distance_traveled:.2f}\n")
             case "4":
+                # Exits Program
                 exit_menu = True
             case _:
                 print("Invalid Input - Please Try Again")

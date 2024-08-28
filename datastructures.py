@@ -3,24 +3,28 @@ import csv
 from package import Package
 
 class HashTable:
+    # Initializes HashTable. Copies 50 empty arrays to table
     def __init__(self, size = 50):
         self.size = size
         self.table = []
         for i in range(self.size):
             self.table.append([])
 
+    # Hashes Package ID to determine index(bucket) to insert package object.
     def insert(self, id, package):
         index = hash(id) % self.size
         index_list = self.table[index]
-
+        # If same package ID already exists at index(bucket), update value with new updated package object.
         for packages in index_list:
             if packages[0] == id:
                 packages[1] = package
                 return True
-
+        # Add package ID and package object to hash table index(bucket) determined by hashing the package ID.
         index_list.append([id,package])
         return True
 
+    # Looks up package by the package ID. Hashes ID to find index(bucket). If the index(bucket) is not empty it
+    # loops through packages at that index(bucket). If the package ID matches, returns the package object.
     def find(self, id):
         index = hash(id) % self.size
         if self.table[index] is not None:
@@ -29,6 +33,7 @@ class HashTable:
                     return package[1]
         return None
 
+    # Prints all packages stored in hash table
     def print(self):
         for index, packages in enumerate(self.table):
             if packages:
