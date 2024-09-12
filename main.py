@@ -1,5 +1,5 @@
 # Jonathan Sherwin - C950 - Student ID: 011064274
-
+from contextlib import nullcontext
 from datetime import timedelta
 from datastructures import *
 from truck import *
@@ -11,23 +11,13 @@ red = '\033[31m'
 blue = "\033[34m"
 default = '\033[0m'
 
-# Initializes a Hash Table object and inserts packages into hash.
-package_hash = HashTable()
-insert_packages('packages.csv', package_hash)
-
 # Reads address and distances from csv and creates a list of addresses and a list of distances.
 address_list = insert_addresses('distancetable.csv')
 distances_list = insert_distances('distancetable.csv')
 
-# Initializes three trucks with their time to leave the HUB and the HUB location.
-truck1 = Truck(timedelta(hours=8), address_list[0])
-truck2 = Truck(timedelta(hours=10,minutes=20), address_list[0])
-truck3 = Truck(timedelta(hours=9,minutes=5), address_list[0])
+#Initializes hash table
+package_hash = HashTable()
 
-# Packages are loaded onto each truck by their package ID
-truck1.add_packages([14,15,19,16,13,20,21,1,39,10,37,34,30])
-truck2.add_packages([18,3,36,9,27,35,2,33,28,5,24,19,38])
-truck3.add_packages([29,7,6,17,31,32,12,8,25,26,11,23,22,40,4])
 
 
 
@@ -71,8 +61,8 @@ def deliver_packages(truck, selected_time):
         truck.packages.remove(package_id)
         package_hash.find(package_id).status = f"Delivered at {truck.time}"
 
-    # Sends truck1 back to hub so driver can take truck2
-    if truck == truck1:
+    # Checks if this is the first truck to leave the hub (truck1). Sends truck back to hub so driver can take truck2
+    if truck.time_left_hub == timedelta(hours=8):
         distance = float(find_distance(truck.location, address_list[0]))
         delivery_time = timedelta(hours = distance / 18)
         truck.time += delivery_time
@@ -83,6 +73,19 @@ def main():
     exit_menu = False
 
     while not exit_menu:
+        # Inserts packages into hash
+        insert_packages('packages.csv', package_hash)
+
+        # Initializes three trucks with their time to leave the HUB and the HUB location.
+        truck1 = Truck(timedelta(hours=8), address_list[0])
+        truck2 = Truck(timedelta(hours=10, minutes=20), address_list[0])
+        truck3 = Truck(timedelta(hours=9, minutes=5), address_list[0])
+
+        # Packages are loaded onto each truck by their package ID
+        truck1.add_packages([14, 15, 19, 16, 13, 20, 21, 1, 39, 10, 37, 34, 30])
+        truck2.add_packages([18, 3, 36, 9, 27, 35, 2, 33, 28, 5, 24, 19, 38])
+        truck3.add_packages([29, 7, 6, 17, 31, 32, 12, 8, 25, 26, 11, 23, 22, 40, 4])
+
         print(f"{blue}###############################################")
         print("########  WGUPS DELIVERY SYSTEM MENU  #########")
         print(f"###############################################{default}")

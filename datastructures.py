@@ -24,7 +24,8 @@ class HashTable:
         return True
 
     # Looks up package by the package ID. Hashes ID to find index(bucket). If the index(bucket) is not empty it
-    # loops through packages at that index(bucket). If the package ID matches, returns the package object.
+    # loops through packages at that index(bucket). If the package ID matches, returns the package object and all of
+    # its properties.
     def find(self, id):
         index = hash(id) % self.size
         if self.table[index] is not None:
