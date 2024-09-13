@@ -17,7 +17,7 @@ class Package:
     def __str__(self):
         if self.status == "At Hub":
             return f"{red}{self.id} | {self.address}, {self.city}, {self.state} {self.zipcode} | {self.deadline} | {self.weight} | {self.status}{default}"
-        elif self.status == "En Route":
+        elif "En Route" in self.status:
             return f"{yellow}{self.id} | {self.address}, {self.city}, {self.state} {self.zipcode} | {self.deadline} | {self.weight} | {self.status}{default}"
         else:
             return f"{green}{self.id} | {self.address}, {self.city}, {self.state} {self.zipcode} | {self.deadline} | {self.weight} | {self.status}{default}"

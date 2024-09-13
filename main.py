@@ -48,7 +48,12 @@ def deliver_packages(truck, selected_time):
         package_hash.find(9).address = "410 S State St"
     # Begins to deliver packages. Loops through packages on truck and runs min_distance function to determine where to deliver next.
     for package in truck.packages:
-        package_hash.find(package).status = "En Route"
+        if truck.time_left_hub == timedelta(hours=8):
+            package_hash.find(package).status = "En Route - Truck 1"
+        elif truck.time_left_hub == timedelta(hours=10, minutes=20):
+            package_hash.find(package).status = "En Route - Truck 2"
+        elif truck.time_left_hub == timedelta(hours=9, minutes=5):
+            package_hash.find(package).status = "En Route - Truck 3"
     while len(truck.packages) > 0:
         address, package_id, distance = min_distance(truck.location, truck.packages)
         delivery_time = timedelta(hours = distance / 18)
