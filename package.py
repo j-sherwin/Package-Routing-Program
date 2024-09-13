@@ -13,14 +13,15 @@ class Package:
         self.deadline = deadline
         self.weight = weight
         self.status = status
+        self.truck = None
 
     def __str__(self):
         if self.status == "At Hub":
-            return f"{red}{self.id} | {self.address}, {self.city}, {self.state} {self.zipcode} | {self.deadline} | {self.weight} | {self.status}{default}"
-        elif "En Route" in self.status:
-            return f"{yellow}{self.id} | {self.address}, {self.city}, {self.state} {self.zipcode} | {self.deadline} | {self.weight} | {self.status}{default}"
+            return f"{red}{self.id} | {self.address}, {self.city}, {self.state} {self.zipcode} | {self.deadline} | {self.weight} | {self.status} | {self.truck}{default}"
+        elif self.status == "En Route":
+            return f"{yellow}{self.id} | {self.address}, {self.city}, {self.state} {self.zipcode} | {self.deadline} | {self.weight} | {self.status} | {self.truck}{default}"
         else:
-            return f"{green}{self.id} | {self.address}, {self.city}, {self.state} {self.zipcode} | {self.deadline} | {self.weight} | {self.status}{default}"
+            return f"{green}{self.id} | {self.address}, {self.city}, {self.state} {self.zipcode} | {self.deadline} | {self.weight} | {self.status} | {self.truck}{default}"
 
 
 

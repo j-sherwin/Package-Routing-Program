@@ -18,9 +18,6 @@ distances_list = insert_distances('distancetable.csv')
 #Initializes hash table
 package_hash = HashTable()
 
-
-
-
 # Checks 2D Array of Distances to find distance between two addresses.
 def find_distance(address1, address2):
     return distances_list[address_list.index(address1)][address_list.index(address2)]
@@ -48,12 +45,13 @@ def deliver_packages(truck, selected_time):
         package_hash.find(9).address = "410 S State St"
     # Begins to deliver packages. Loops through packages on truck and runs min_distance function to determine where to deliver next.
     for package in truck.packages:
+        package_hash.find(package).status = "En Route"
         if truck.time_left_hub == timedelta(hours=8):
-            package_hash.find(package).status = "En Route - Truck 1"
+            package_hash.find(package).truck = "Truck 1"
         elif truck.time_left_hub == timedelta(hours=10, minutes=20):
-            package_hash.find(package).status = "En Route - Truck 2"
-        elif truck.time_left_hub == timedelta(hours=9, minutes=5):
-            package_hash.find(package).status = "En Route - Truck 3"
+            package_hash.find(package).truck = "Truck 2"
+        else:
+            package_hash.find(package).truck = "Truck 3"
     while len(truck.packages) > 0:
         address, package_id, distance = min_distance(truck.location, truck.packages)
         delivery_time = timedelta(hours = distance / 18)
@@ -110,7 +108,7 @@ def main():
                     deliver_packages(truck1, time)
                     deliver_packages(truck2, time)
                     deliver_packages(truck3, time)
-                    print(f"\n{cyan}ID | Address | City | State | Zipcode | Deadline | Weight | Status{default}")
+                    print(f"\n{cyan}ID | Address | City | State | Zipcode | Deadline | Weight | Status | Truck{default}")
                     package_hash.print()
                     total_miles = truck1.distance_traveled + truck2.distance_traveled + truck3.distance_traveled
                     print(f"\nTruck 1 Mileage: {truck1.distance_traveled:.2f}")
